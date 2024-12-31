@@ -1,18 +1,34 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Visualisierung } from "./visualisierung.js";
 import { UserInteraktion } from "./userInteraktion.js";
 import Navigationsleiste from "./navigationsleiste.js";
 import axios from "axios";
-import Grid from "@mui/material/Grid2";
+import Grid2 from "@mui/material/Grid2";
 
 export default function App() {
   const [Art, setArt] = useState("");
   const [Obj, setObj] = useState([]);
-  const [startDate, setStartDate] = useState("2023-01-01");
-  const [endDate, setEndDate] = useState("2023-01-31");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
   const [Grafik, setGrafik] = useState(null);
   const [Error, setError] = useState("");
-  const [Abfrage, setAbfrage] = useState("RainDur");
+  const [Abfrage, setAbfrage] = useState("");
+  const [optionenObj, setOptionenObj] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const anfrage = await axios.get(
+          `http://127.0.0.1:8000/Meteodaten/Standortnamen`
+        );
+        setOptionenObj(anfrage.data);
+      } catch (err) {
+        setError("Fehler beim Abfragen der Stadortnamen");
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const Erstellen = async () => {
     setError("");
@@ -27,12 +43,12 @@ export default function App() {
       return;
     }
     try {
-      const anfrage = await axios.get(`http://127.0.0.1:8000/${Art}`, {
+      const anfrage = await axios.get(`http://127.0.0.1:8000/Altair/${Art}`, {
         params: {
           Obj: JSON.stringify(Obj),
           Abfrage: Abfrage,
-          startDate: startDate.toString(),
-          endDate: endDate.toString(),
+          startDate: startDate,
+          endDate: endDate,
         },
       });
       setGrafik(anfrage.data);
@@ -41,11 +57,11 @@ export default function App() {
     }
   };
   return (
-    <Grid container item xs={12}>
+    <Grid2 container xs={12} style={{ marginLeft: 50 }}>
       <Navigationsleiste />
 
-      <Grid container spacing={2} style={{ width: "100%", height: "100vh" }}>
-        <Grid item xs={6}>
+      <Grid2 container spacing={2} style={{ width: "100%", height: "100vh" }}>
+        <Grid2 item xs={8}>
           {Error}
           <Visualisierung
             style={{}}
@@ -53,8 +69,8 @@ export default function App() {
             Erstellen={Erstellen}
             Abfrage={Abfrage}
           />
-        </Grid>
-        <Grid item xs={6} style={{ background: "#f0f0f0" }}>
+        </Grid2>
+        <Grid2 item xs={4} style={{ background: "#f0f0f0" }}>
           <UserInteraktion
             Art={Art}
             setArt={setArt}
@@ -67,9 +83,11 @@ export default function App() {
             Erstellen={Erstellen}
             Abfrage={Abfrage}
             setAbfrage={setAbfrage}
+            setOptionenObj={setOptionenObj}
+            optionenObj={optionenObj}
           />
-        </Grid>
-      </Grid>
-    </Grid>
+        </Grid2>
+      </Grid2>
+    </Grid2>
   );
 }

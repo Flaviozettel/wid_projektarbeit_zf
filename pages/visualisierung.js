@@ -8,7 +8,7 @@ export function Visualisierung({ Grafik, Abfrage }) {
     return (
       <div
         className="container_vis"
-        style={{ width: 600, height: 450, background: "#ffebee" }}
+        style={{ width: 1000, height: 600, background: "#ffebee" }}
       >
         <div
           style={{
@@ -17,7 +17,7 @@ export function Visualisierung({ Grafik, Abfrage }) {
             justifyContent: "center",
           }}
         >
-          <h1>Platzhalter</h1>
+          <h1>Platzhalter Grafik</h1>
         </div>
       </div>
     );
@@ -30,24 +30,14 @@ export function Visualisierung({ Grafik, Abfrage }) {
           alignItems: "center",
           justifyContent: "center",
         }}
-      >
-        <div style={{ fontSize: 25, fontWeight: "bold" }}>
-          {Abfrage === "T"
-            ? "Temperatur nach Datum und Station im Raum Zürich"
-            : Abfrage === "p"
-            ? "Luftdruck nach Datum und Station im Raum Zürich"
-            : Abfrage === "RainDur"
-            ? "Regendauer nach Datum und Station im Raum Zürich"
-            : ""}{" "}
-        </div>
-      </div>
+      ></div>
       <div
         style={{
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          width: 600,
-          height: 450,
+          width: 1000,
+          height: 600,
           background: "#ffebee",
         }}
       >

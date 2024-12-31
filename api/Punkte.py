@@ -3,17 +3,17 @@ import altair as alt
 import pandas as pd
 import json
 
-data = pd.read_json("./pages/public/meteodaten_2023_daily.json")
-data["Datum"] = pd.to_datetime(data["Datum"], unit="ms")
+meteodaten= pd.read_json("./data/meteodaten_2023_daily.json")
+meteodaten["Datum"] = pd.to_datetime(meteodaten["Datum"], unit="ms")
 
 def Punkte(Obj, Abfrage, startDate, endDate):
     Obj = json.loads(Obj)
     try:
 
-        DataFilter = data[
-            (data["Datum"] >= startDate) &
-            (data["Datum"] <= endDate) &
-            (data["Standortname"].isin(Obj))
+        DataFilter = meteodaten[
+            (meteodaten["Datum"] >= startDate) &
+            (meteodaten["Datum"] <= endDate) &
+            (meteodaten["Standortname"].isin(Obj))
         ]
 
         if DataFilter.empty:
@@ -27,5 +27,4 @@ def Punkte(Obj, Abfrage, startDate, endDate):
 
         return diagramm.to_dict()
     except Exception as e:
-        print(f"Fehler: {e}")
-        return {"error": str(e)}
+        return {"error"}

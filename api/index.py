@@ -1,8 +1,9 @@
 from fastapi import FastAPI, Query
-from api.Saeulen import Saeulen
-from api.Linien import Linien
-from api.Punkte import Punkte
-from fastapi.middleware.cors import CORSMiddleware 
+from .Saeulen import Saeulen
+from .Linien import Linien
+from .Punkte import Punkte
+from fastapi.middleware.cors import CORSMiddleware
+import json
 
 
 
@@ -15,24 +16,28 @@ allow_methods=["*"],
 allow_headers=["*"], 
 )
 
+with open("./data/meteodaten_2023_daily.json", "r") as data:
+    meteodaten = json.load(data)
+
+@app.get("/Meteodaten/Standortnamen")
+async def getStandortnamen():
+
+    optionenObj=list(set(i["Standortname"] for i in meteodaten))
+            
+    print(optionenObj)
+    return optionenObj
+    
 
 
 
-### Backend
-
-@app.get("/test")
-def test_route():
-    return {"message": "Backend-Verbindung funktioniert!"}
-
-
-@app.get("/Säulendiagramm")
+@app.get("/Altair/Säulendiagramm")
 async def getSäulen(Obj: str = Query(...), Abfrage: str = Query(...), startDate: str = Query(...), endDate: str = Query(...)):
     return Saeulen(Obj, Abfrage, startDate, endDate)
 
-@app.get("/Liniendiagramm")
+@app.get("/Altair/Liniendiagramm")
 async def getLinien(Obj: str = Query(...), Abfrage: str = Query(...), startDate: str = Query(...), endDate: str = Query(...)):
     return Linien(Obj, Abfrage, startDate, endDate)
 
-@app.get("/Punktediagramm")
+@app.get("/Altair/Punktediagramm")
 async def getLinien(Obj: str = Query(...), Abfrage: str = Query(...), startDate: str = Query(...), endDate: str = Query(...)):
     return Punkte(Obj, Abfrage, startDate, endDate)

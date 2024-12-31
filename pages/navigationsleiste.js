@@ -24,7 +24,7 @@ export default function Navigationsleiste() {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        width: 815,
+        width: 1260,
         height: 100,
         background: "#ffebee",
       }}
@@ -34,9 +34,9 @@ export default function Navigationsleiste() {
       </div>
       <IconButton
         style={{
-          display: "flex",
+          position: "absolute",
           justifyContent: "flex-end",
-          marginLeft: 80,
+          marginLeft: 1200,
         }}
         onClick={() => InfoOpen()}
         variant="contained"
@@ -47,31 +47,32 @@ export default function Navigationsleiste() {
         <DialogTitle>Infos</DialogTitle>
         <DialogContent>
           <DialogContentText>
+            `
             <p>
               |) Bitte beachten Sie, dass die Wetterdaten lediglich für das Jahr
               2023 vorliegen.{" "}
             </p>
             <p>||) Beschreibung Parameter:</p>
             <p>
-              "ID": "p", "Name": "Luftdruck", "Einheit": "hPa", "Beschreibung":
-              "Mit Luftdruck wird der von der Masse der Luft unter der Wirkung
+              `ID`: `p`, `Name`: `Luftdruck`, `Einheit`: `hPa`, `Beschreibung`:
+              `Mit Luftdruck wird der von der Masse der Luft unter der Wirkung
               der Erdanziehung ausgeübte Druck bezeichnet. Er ist definiert als
               das Gewicht der Luftsäule pro Flächeneinheit vom Erdboden bis zur
-              äusseren Grenze der Atmosphäre."
+              äusseren Grenze der Atmosphäre.`
             </p>
             <p>
-              "ID": "T", "Name": "Lufttemperatur", "Einheit": "°C",
-              "Beschreibung": "Physikalisch betrachtet ist die Lufttemperatur
+              `ID`: `T`, `Name`: `Lufttemperatur`, `Einheit`: `°C`,
+              `Beschreibung`: `Physikalisch betrachtet ist die Lufttemperatur
               ein Mass für den Wärmezustand eines Luftvolumens. Dieser wird
               bestimmt durch die mittlere kinetische Energie der ungeordneten
               Molekularbewegung in der Luft. Je grösser die mittlere
               Geschwindigkeit aller Moleküle in einem Luftvolumen ist, um so
-              höher ist auch seine Lufttemperatur."
+              höher ist auch seine Lufttemperatur.`
             </p>
             <p>
-              "ID": "RainDur", "Name": "Niederschlagsdauer", "Einheit": "min",
-              "Beschreibung": "Anzahl der Minuten in denen es im
-              Mittelungsintervall geregnet hat."
+              `ID`: `RainDur`, `Name`: `Niederschlagsdauer`, `Einheit`: `min`,
+              `Beschreibung`: `Anzahl der Minuten in denen es im
+              Mittelungsintervall geregnet hat.`
             </p>
           </DialogContentText>
         </DialogContent>

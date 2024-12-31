@@ -12,26 +12,26 @@ import {
   Typography,
   Container,
 } from "@mui/material";
-import axios from "axios";
-import data from "./public/meteodaten_2023_daily.json";
 
 export function UserInteraktion({
   Obj,
   setObj,
   Art,
   setArt,
+  startDate,
+  endDate,
   setStartDate,
   setEndDate,
   Erstellen,
   setAbfrage,
   Abfrage,
+  optionenObj,
+  setOptionenObj,
+  useEffect,
 }) {
-  const arrayObj = [...new Set(data.map((e) => e.Standortname))];
-  const optionenObj = arrayObj.map((value, index) => ({
-    id: index,
-    value: value,
-    label: value,
-  }));
+  const [open, setOpen] = useState(false);
+  const [dateError1, setDateError1] = useState(false);
+  const [dateError2, setDateError2] = useState(false);
 
   const optionenArt = [
     { id: 11, value: "Liniendiagramm", label: "Liniendiagramm" },
@@ -48,12 +48,24 @@ export function UserInteraktion({
   function Datumsumwandlung(value, id) {
     const [JJJJ, MM, DD] = value.split("/");
     if (!JJJJ || !MM || !DD) {
-      console.error("Gibt das Datum gemäss JJJJ/MM/DD ein");
-      return;
+      {
+        if (id == "StartDate") {
+          setDateError1(true);
+        } else {
+          setDateError2(true);
+        }
+      }
+      return "Gibt das Datum gemäss JJJJ/MM/DD ein";
     }
     if (JJJJ !== "2023") {
-      console.error("Aktuell nur Daten vom Jahr 2023 vorhanden");
-      return;
+      {
+        if (id == "StartDate") {
+          setDateError1(true);
+        } else {
+          setDateError2(true);
+        }
+      }
+      return "Aktuell nur Daten vom Jahr 2023 vorhanden";
     }
     const date = new Date(`${JJJJ}-${MM}-${DD}`);
     if (
@@ -62,28 +74,28 @@ export function UserInteraktion({
       date.getDate() == DD
     ) {
       if (id == "StartDate") {
+        setDateError1(false);
         setStartDate(date.toISOString().split("T")[0]);
       } else {
+        setDateError2(false);
         setEndDate(date.toISOString().split("T")[0]);
       }
     } else {
-      console.error("Datum nicht im Wertebereich");
+      {
+        if (id == "StartDate") {
+          setDateError1(true);
+        } else {
+          setDateError2(true);
+        }
+      }
+      return "Datum ist ungültig";
     }
   }
-
-  const Drucken = async () => {
-    try {
-      const response = await axios.get("http://127.0.0.1:8000/test");
-      console.log("Antwort vom Backend:", response.data.message);
-    } catch (err) {
-      console.error("Fehler beim Zugriff auf das Backend:", err.message);
-    }
-  };
 
   return (
     <div
       className="Container"
-      style={{ width: 200, display: "flex", flexDirection: "column", gap: 20 }}
+      style={{ width: 250, display: "flex", flexDirection: "column", gap: 25 }}
     >
       <div>
         <FormControl fullWidth>
@@ -93,12 +105,17 @@ export function UserInteraktion({
             value={Obj}
             multiple
             label="Stationen"
+            style={{ fontFamily: "Arial", fontSize: 16, variant: "outlined" }}
             onChange={(e) => setObj(e.target.value)}
+            onClick={useEffect}
+            open={open}
+            onOpen={() => setOpen(true)}
+            onClose={() => setOpen(false)}
           >
-            {optionenObj.map((e) => (
-              <MenuItem key={e.id} value={e.value}>
-                <Checkbox />
-                <ListItemText primary={e.label} />
+            {optionenObj.map((station, index) => (
+              <MenuItem key={index} value={station}>
+                <Checkbox checked={Obj.includes(station)} />
+                <ListItemText primary={station} />
               </MenuItem>
             ))}
           </Select>
@@ -107,9 +124,14 @@ export function UserInteraktion({
       <div>
         <TextField
           id="StartDate"
+          error={dateError1}
           label="Von (JJJJ/MM/DD)"
-          defaultValue="2023/01/01"
-          variant="standard"
+          style={{
+            width: "100%",
+            fontFamily: "Arial",
+            fontSize: 16,
+            variant: "outlined",
+          }}
           onChange={(e) => {
             Datumsumwandlung(e.target.value, e.target.id);
           }}
@@ -118,9 +140,14 @@ export function UserInteraktion({
       <div>
         <TextField
           id="EndDate"
+          error={dateError2}
           label="Bis (JJJJ/MM/DD)"
-          defaultValue="2023/01/31"
-          variant="standard"
+          style={{
+            width: "100%",
+            fontFamily: "Arial",
+            fontSize: 16,
+            variant: "outlined",
+          }}
           onChange={(e) => {
             Datumsumwandlung(e.target.value, e.target.id);
           }}
@@ -132,8 +159,8 @@ export function UserInteraktion({
           <Select
             id="Visualisierungsart"
             value={Art}
-            defaultValue="Liniendiagramm"
             label="Art"
+            style={{ fontFamily: "Arial", fontSize: 16, variant: "outlined" }}
             onChange={(e) => setArt(e.target.value)}
           >
             {optionenArt.map((e) => (
@@ -150,8 +177,8 @@ export function UserInteraktion({
           <Select
             id="Abfrage"
             value={Abfrage}
-            defaultValue="RainDur"
             label="Abfrage"
+            style={{ fontFamily: "Arial", fontSize: 16, variant: "outlined" }}
             onChange={(e) => setAbfrage(e.target.value)}
           >
             {optionenAbfrage.map((e) => (
@@ -163,14 +190,35 @@ export function UserInteraktion({
         </FormControl>
       </div>
 
-      <Stack spacing={2} direction="row">
-        <Button onClick={() => Erstellen()} variant="contained">
-          Erstellen
-        </Button>
-        <Button onClick={() => Drucken()} variant="contained">
-          Drucken
-        </Button>
-      </Stack>
+      <Button
+        onClick={() => Erstellen()}
+        style={{
+          height: 60,
+          border: "1px solid black",
+          fontFamily: "Arial",
+          fontSize: 16,
+          variant: "outlined",
+          backgroundColor: "#f0f8ff",
+        }}
+        disabled={
+          !startDate ||
+          !endDate ||
+          Obj.length === 0 ||
+          Art.length === 0 ||
+          Abfrage.length === 0
+        }
+      >
+        Erstellen
+      </Button>
+      {!startDate ||
+      !endDate ||
+      Obj.length === 0 ||
+      Art.length === 0 ||
+      Abfrage.length === 0 ? (
+        <p style={{ textAlign: "center", marginTop: -10 }}>
+          Bitte fülle alle Parameter ab
+        </p>
+      ) : null}
     </div>
   );
 }
