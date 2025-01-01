@@ -19,11 +19,11 @@ def Linien(Standort, Abfrage, TSstartDate, TSendDate):
             raise ValueError("Keine Daten im gewählten Zeitraum")
         
         if Abfrage=="RainDur": 
-            Abfrage_typ= "Regendauer" 
+            Abfrage_typ= "Regendauer [min]" 
         elif Abfrage == "p": 
-            Abfrage_typ= "Luftdruck"  
+            Abfrage_typ= "Luftdruck [hpa]"  
         else: 
-            Abfrage_typ="Temperatur"
+            Abfrage_typ="Temperatur [°C]"
 
         diagramm = alt.Chart(DataFilter).mark_line().encode(
              x=alt.X("Datum:T", axis=alt.Axis(grid=False, format="%d.%m.%Y", labelAngle=-90, labelFontSize=12, titleFontSize=12, labelFont="Arial", titleFont="Arial", title="Datum", tickCount="day")),

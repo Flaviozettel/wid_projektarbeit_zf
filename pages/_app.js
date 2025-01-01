@@ -79,7 +79,12 @@ export default function App() {
     }
   };
   return (
-    <Grid2 container item xs={12} style={{ marginLeft: 50 }}>
+    <Grid2
+      container
+      item
+      xs={12}
+      style={{ marginLeft: 0, background: "#f0f0f0" }}
+    >
       <Navigationsleiste />
 
       <Grid2
@@ -96,7 +101,7 @@ export default function App() {
             Abfrage={Abfrage}
           />
         </Grid2>
-        <Grid2 item xs={4} style={{ background: "#f0f0f0" }}>
+        <Grid2 item xs={4} style={{}}>
           <UserInteraktion
             Art={Art}
             setArt={setArt}

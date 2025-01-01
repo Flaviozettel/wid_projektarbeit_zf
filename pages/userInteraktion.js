@@ -170,7 +170,7 @@ export default function UserInteraktion({
           fontFamily: "Arial",
           fontSize: 16,
           variant: "outlined",
-          backgroundColor: "#f0f8ff",
+          background: "#add8e6",
         }}
         disabled={ParaAbfüllen}
       >

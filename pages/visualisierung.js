@@ -3,15 +3,15 @@ import { VegaLite } from "react-vega";
 export default function Visualisierung({ Grafik, Abfrage }) {
   if (!Grafik) {
     return (
-      <div
-        className="container_vis"
-        style={{ width: 1000, height: 600, background: "#ffebee" }}
-      >
+      <div className="container_vis" style={{ width: 1000, height: 600 }}>
         <div
           style={{
             display: "flex",
             marginTop: 130,
             justifyContent: "center",
+            border: "1px solid black",
+            width: 400,
+            marginLeft: 450,
           }}
         >
           <h1>Platzhalter Grafik</h1>

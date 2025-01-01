@@ -25,7 +25,6 @@ export default function Navigationsleiste() {
         justifyContent: "center",
         width: 1260,
         height: 100,
-        background: "#ffebee",
       }}
     >
       <div style={{ fontSize: 45, fontWeight: "bold" }}>
