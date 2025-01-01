@@ -8,17 +8,17 @@ meteodaten= pd.read_json("./data/meteodaten_2023_daily.json")
 print(meteodaten.head())
 meteodaten["Datum"] = pd.to_datetime(meteodaten["Datum"], unit="ms")
 
-def Saeulen(Obj, Abfrage, startDate, endDate):
-    Obj = json.loads(Obj)
+def Saeulen(Standort, Abfrage, TSstartDate, TSendDate):
+    Standort = json.loads(Standort)
     try:
 
         DataFilter = meteodaten[
-            (meteodaten["Datum"] >= startDate) &
-            (meteodaten["Datum"] <= endDate) &
-            (meteodaten["Standortname"].isin(Obj))
+            (meteodaten["Datum"] >= pd.to_datetime(TSstartDate, unit="ms")) &
+            (meteodaten["Datum"] <= pd.to_datetime(TSendDate, unit="ms")) &
+            (meteodaten["Standortname"].isin(Standort))
         ]
 
-        if DataFilter.empty:
+        if len(DataFilter) == 0:
             raise ValueError("Keine Daten im gewählten Zeitraum")
         
         if Abfrage=="RainDur": 
@@ -29,7 +29,7 @@ def Saeulen(Obj, Abfrage, startDate, endDate):
             Abfrage_typ="Temperatur"
 
         diagramm = alt.Chart(DataFilter).mark_bar(size=15).encode(
-            x=alt.X("Datum:T", axis=alt.Axis(grid=False, format="%d.%m.%Y", labelAngle=-90, labelFontSize=12, titleFontSize=12, labelFont="Arial", titleFont="Arial", title="Datum")),
+            x=alt.X("Datum:T", axis=alt.Axis(grid=False, format="%d.%m.%Y", labelAngle=-90, labelFontSize=12, titleFontSize=12, labelFont="Arial", titleFont="Arial", title="Datum", tickCount="day")),
             y=alt.Y(f"{Abfrage}:Q", axis=alt.Axis(grid=True,  labelFontSize=12, titleFontSize=12, labelFont="Arial", titleFont="Arial", title=f"{Abfrage_typ}")),
             color=alt.Color("Standortname:N", legend=alt.Legend(title="Legende",labelFontSize=12, labelFont="Arial", orient="right"))
 

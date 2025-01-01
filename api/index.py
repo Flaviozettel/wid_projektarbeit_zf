@@ -22,22 +22,21 @@ with open("./data/meteodaten_2023_daily.json", "r") as data:
 @app.get("/Meteodaten/Standortnamen")
 async def getStandortnamen():
 
-    optionenObj=list(set(i["Standortname"] for i in meteodaten))
+    optionenStandort=list(set(i["Standortname"] for i in meteodaten))
             
-    print(optionenObj)
-    return optionenObj
+    return optionenStandort
     
 
 
 
 @app.get("/Altair/Säulendiagramm")
-async def getSäulen(Obj: str = Query(...), Abfrage: str = Query(...), startDate: str = Query(...), endDate: str = Query(...)):
-    return Saeulen(Obj, Abfrage, startDate, endDate)
+async def getSäulen(Standort: str = Query(...), Abfrage: str = Query(...), TSstartDate: int = Query(...), TSendDate: int = Query(...)):
+    return Saeulen(Standort, Abfrage, TSstartDate, TSendDate)
 
 @app.get("/Altair/Liniendiagramm")
-async def getLinien(Obj: str = Query(...), Abfrage: str = Query(...), startDate: str = Query(...), endDate: str = Query(...)):
-    return Linien(Obj, Abfrage, startDate, endDate)
+async def getLinien(Standort: str = Query(...), Abfrage: str = Query(...), TSstartDate: int = Query(...), TSendDate: int = Query(...)):
+    return Linien(Standort, Abfrage, TSstartDate, TSendDate)
 
 @app.get("/Altair/Punktediagramm")
-async def getLinien(Obj: str = Query(...), Abfrage: str = Query(...), startDate: str = Query(...), endDate: str = Query(...)):
-    return Punkte(Obj, Abfrage, startDate, endDate)
+async def getLinien(Standort: str = Query(...), Abfrage: str = Query(...), TSstartDate: int = Query(...), TSendDate: int = Query(...)):
+    return Punkte(Standort, Abfrage, TSstartDate, TSendDate)

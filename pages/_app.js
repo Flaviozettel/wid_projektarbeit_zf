@@ -7,13 +7,18 @@ import Grid2 from "@mui/material/Grid2";
 
 export default function App() {
   const [Art, setArt] = useState("");
-  const [Obj, setObj] = useState([]);
+  const [Standort, setStandort] = useState([]);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [Grafik, setGrafik] = useState(null);
   const [Error, setError] = useState("");
   const [Abfrage, setAbfrage] = useState("");
-  const [optionenObj, setOptionenObj] = useState([]);
+  const [optionenStandort, setOptionenStandort] = useState([]);
+  const [startDateError, setStartDateError] = useState(false);
+  const [endDateError, setEndDateError] = useState(false);
+  const [dateErrorText, setDateErrorText] = useState("");
+  const [TSstartDate, setTSStartDate] = useState(12345);
+  const [TSendDate, setTSEndDate] = useState(12345);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -21,7 +26,7 @@ export default function App() {
         const anfrage = await axios.get(
           `http://127.0.0.1:8000/Meteodaten/Standortnamen`
         );
-        setOptionenObj(anfrage.data);
+        setOptionenStandort(anfrage.data);
       } catch (err) {
         setError("Fehler beim Abfragen der Stadortnamen");
       }
@@ -31,38 +36,59 @@ export default function App() {
   }, []);
 
   const Erstellen = async () => {
-    setError("");
+    setDateErrorText("");
     if (
-      !startDate ||
-      !endDate ||
+      !TSendDate ||
+      !TSstartDate ||
       !Abfrage ||
-      Obj.length === 0 ||
+      Standort.length === 0 ||
       Art.length === 0
     ) {
-      setError("Es werden Start- und Enddatum benötigt");
+      setError("Es wurden nicht alle Parameter abgefüllt");
       return;
     }
+
+    if (
+      isNaN(new Date(startDate).getTime()) ||
+      isNaN(new Date(endDate).getTime())
+    ) {
+      setDateErrorText("Datum ungültig");
+      return;
+    }
+    if (TSstartDate >= TSendDate) {
+      setDateErrorText("Startdatum kann nicht nach Enddatum liegen");
+      setEndDateError(true);
+      setStartDateError(true);
+      return;
+    }
+
     try {
       const anfrage = await axios.get(`http://127.0.0.1:8000/Altair/${Art}`, {
         params: {
-          Obj: JSON.stringify(Obj),
+          Standort: JSON.stringify(Standort),
           Abfrage: Abfrage,
-          startDate: startDate,
-          endDate: endDate,
+          TSstartDate: TSstartDate,
+          TSendDate: TSendDate,
         },
       });
       setGrafik(anfrage.data);
     } catch (err) {
-      setError("Fehler, Daten wurden nicht aufgerufen"); //* Irgendwo muss ich noch einbauen, dass wenn nicht alle Parameter abgefüllt ein Fehler auftritt
+      setError(
+        "Fehler, Daten wurden nicht aufgerufen. Bitte überprüfen Sie ihre Eingabe"
+      );
     }
   };
   return (
-    <Grid2 container xs={12} style={{ marginLeft: 50 }}>
+    <Grid2 container item xs={12} style={{ marginLeft: 50 }}>
       <Navigationsleiste />
 
-      <Grid2 container spacing={2} style={{ width: "100%", height: "100vh" }}>
+      <Grid2
+        container
+        item
+        spacing={2}
+        style={{ width: "100%", height: "100vh" }}
+      >
         <Grid2 item xs={8}>
-          {Error}
           <Visualisierung
             style={{}}
             Grafik={Grafik}
@@ -74,8 +100,8 @@ export default function App() {
           <UserInteraktion
             Art={Art}
             setArt={setArt}
-            Obj={Obj}
-            setObj={setObj}
+            Standort={Standort}
+            setStandort={setStandort}
             startDate={startDate}
             setStartDate={setStartDate}
             endDate={endDate}
@@ -83,8 +109,19 @@ export default function App() {
             Erstellen={Erstellen}
             Abfrage={Abfrage}
             setAbfrage={setAbfrage}
-            setOptionenObj={setOptionenObj}
-            optionenObj={optionenObj}
+            setOptionenStandort={setOptionenStandort}
+            optionenStandort={optionenStandort}
+            Error={Error}
+            startDateError={startDateError}
+            setStartDateError={setStartDateError}
+            endDateError={endDateError}
+            setEndDateError={setEndDateError}
+            dateErrorText={dateErrorText}
+            setDateErrorText={setDateErrorText}
+            setTSStartDate={setTSStartDate}
+            setTSEndDate={setTSEndDate}
+            TSstartDate={TSstartDate}
+            TSendDate={TSendDate}
           />
         </Grid2>
       </Grid2>

@@ -1,38 +1,33 @@
-import { useState } from "react";
 import {
   Select,
   Button,
-  Stack,
   MenuItem,
   InputLabel,
   Checkbox,
   FormControl,
   ListItemText,
   TextField,
-  Typography,
-  Container,
 } from "@mui/material";
 
 export function UserInteraktion({
-  Obj,
-  setObj,
+  Standort,
+  setStandort,
   Art,
   setArt,
-  startDate,
-  endDate,
   setStartDate,
   setEndDate,
   Erstellen,
   setAbfrage,
   Abfrage,
-  optionenObj,
-  setOptionenObj,
+  optionenStandort,
   useEffect,
+  Error,
+  dateErrorText,
+  setTSStartDate,
+  setTSEndDate,
+  TSstartDate,
+  TSendDate,
 }) {
-  const [open, setOpen] = useState(false);
-  const [dateError1, setDateError1] = useState(false);
-  const [dateError2, setDateError2] = useState(false);
-
   const optionenArt = [
     { id: 11, value: "Liniendiagramm", label: "Liniendiagramm" },
     { id: 12, value: "Punktediagramm", label: "Punktediagramm" },
@@ -45,51 +40,32 @@ export function UserInteraktion({
     { id: 33, value: "T", label: "Temperatur" },
   ];
 
+  const ParaAbfüllen =
+    !TSstartDate ||
+    !TSendDate ||
+    Standort.length === 0 ||
+    Art.length === 0 ||
+    Abfrage.length === 0;
+
   function Datumsumwandlung(value, id) {
-    const [JJJJ, MM, DD] = value.split("/");
-    if (!JJJJ || !MM || !DD) {
-      {
-        if (id == "StartDate") {
-          setDateError1(true);
-        } else {
-          setDateError2(true);
-        }
-      }
-      return "Gibt das Datum gemäss JJJJ/MM/DD ein";
-    }
-    if (JJJJ !== "2023") {
-      {
-        if (id == "StartDate") {
-          setDateError1(true);
-        } else {
-          setDateError2(true);
-        }
-      }
-      return "Aktuell nur Daten vom Jahr 2023 vorhanden";
-    }
-    const date = new Date(`${JJJJ}-${MM}-${DD}`);
-    if (
-      date.getFullYear() == JJJJ &&
-      date.getMonth() + 1 == MM &&
-      date.getDate() == DD
-    ) {
-      if (id == "StartDate") {
-        setDateError1(false);
-        setStartDate(date.toISOString().split("T")[0]);
-      } else {
-        setDateError2(false);
-        setEndDate(date.toISOString().split("T")[0]);
-      }
+    let JJJJ, MM, DD;
+    if (value.includes("/")) {
+      [JJJJ, MM, DD] = value.split("/");
+    } else if (value.includes("-")) {
+      [JJJJ, MM, DD] = value.split("-");
     } else {
-      {
-        if (id == "StartDate") {
-          setDateError1(true);
-        } else {
-          setDateError2(true);
-        }
-      }
-      return "Datum ist ungültig";
     }
+
+    const TS = new Date(`${JJJJ}-${MM}-${DD}`).getTime();
+
+    if (isNaN(new Date(TS).getTime())) {
+      return false;
+    } else if (id == "startDate") {
+      setTSStartDate(new Date(TS).getTime());
+    } else if (id == "endDate") {
+      setTSEndDate(new Date(TS).getTime());
+    }
+    return true;
   }
 
   return (
@@ -99,22 +75,19 @@ export function UserInteraktion({
     >
       <div>
         <FormControl fullWidth>
-          <InputLabel id="Stationen">Stationen</InputLabel>
+          <InputLabel id="Standort">Standort</InputLabel>
           <Select
-            id="Stationen"
-            value={Obj}
+            id="Standort"
+            value={Standort}
             multiple
-            label="Stationen"
+            label="Standort"
             style={{ fontFamily: "Arial", fontSize: 16, variant: "outlined" }}
-            onChange={(e) => setObj(e.target.value)}
+            onChange={(e) => setStandort(e.target.value)}
             onClick={useEffect}
-            open={open}
-            onOpen={() => setOpen(true)}
-            onClose={() => setOpen(false)}
           >
-            {optionenObj.map((station, index) => (
+            {optionenStandort.map((station, index) => (
               <MenuItem key={index} value={station}>
-                <Checkbox checked={Obj.includes(station)} />
+                <Checkbox checked={Standort.includes(station)} />
                 <ListItemText primary={station} />
               </MenuItem>
             ))}
@@ -124,7 +97,6 @@ export function UserInteraktion({
       <div>
         <TextField
           id="StartDate"
-          error={dateError1}
           label="Von (JJJJ/MM/DD)"
           style={{
             width: "100%",
@@ -133,14 +105,14 @@ export function UserInteraktion({
             variant: "outlined",
           }}
           onChange={(e) => {
-            Datumsumwandlung(e.target.value, e.target.id);
+            Datumsumwandlung(e.target.value, "startDate");
+            setStartDate(e.target.value);
           }}
         />
       </div>
       <div>
         <TextField
           id="EndDate"
-          error={dateError2}
           label="Bis (JJJJ/MM/DD)"
           style={{
             width: "100%",
@@ -149,7 +121,8 @@ export function UserInteraktion({
             variant: "outlined",
           }}
           onChange={(e) => {
-            Datumsumwandlung(e.target.value, e.target.id);
+            Datumsumwandlung(e.target.value, "endDate");
+            setEndDate(e.target.value);
           }}
         />
       </div>
@@ -189,7 +162,6 @@ export function UserInteraktion({
           </Select>
         </FormControl>
       </div>
-
       <Button
         onClick={() => Erstellen()}
         style={{
@@ -200,25 +172,22 @@ export function UserInteraktion({
           variant: "outlined",
           backgroundColor: "#f0f8ff",
         }}
-        disabled={
-          !startDate ||
-          !endDate ||
-          Obj.length === 0 ||
-          Art.length === 0 ||
-          Abfrage.length === 0
-        }
+        disabled={ParaAbfüllen}
       >
         Erstellen
       </Button>
-      {!startDate ||
-      !endDate ||
-      Obj.length === 0 ||
-      Art.length === 0 ||
-      Abfrage.length === 0 ? (
+      {ParaAbfüllen ? (
         <p style={{ textAlign: "center", marginTop: -10 }}>
           Bitte fülle alle Parameter ab
         </p>
       ) : null}
+      {dateErrorText && (
+        <p style={{ textAlign: "center", marginTop: -10 }}>{dateErrorText}</p>
+      )}
+
+      {!dateErrorText && Error && (
+        <p style={{ textAlign: "center", marginTop: -10 }}>{Error}</p>
+      )}
     </div>
   );
 }

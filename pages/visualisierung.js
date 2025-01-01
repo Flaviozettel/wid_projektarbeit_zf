@@ -1,7 +1,4 @@
-import { useState } from "react";
 import { VegaLite } from "react-vega";
-import axios from "axios";
-import { App } from "./_app.js";
 
 export function Visualisierung({ Grafik, Abfrage }) {
   if (!Grafik) {
