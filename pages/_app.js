@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import { Visualisierung } from "./visualisierung.js";
-import { UserInteraktion } from "./userInteraktion.js";
+import Visualisierung from "./visualisierung.js";
+import UserInteraktion from "./userInteraktion.js";
 import Navigationsleiste from "./navigationsleiste.js";
 import axios from "axios";
 import Grid2 from "@mui/material/Grid2";

@@ -1,6 +1,6 @@
 import { VegaLite } from "react-vega";
 
-export function Visualisierung({ Grafik, Abfrage }) {
+export default function Visualisierung({ Grafik, Abfrage }) {
   if (!Grafik) {
     return (
       <div

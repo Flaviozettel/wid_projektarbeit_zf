@@ -9,7 +9,7 @@ import {
   TextField,
 } from "@mui/material";
 
-export function UserInteraktion({
+export default function UserInteraktion({
   Standort,
   setStandort,
   Art,
