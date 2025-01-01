@@ -24,7 +24,7 @@ export default function App() {
     const fetchData = async () => {
       try {
         const anfrage = await axios.get(
-          `http://127.0.0.1:8000/Meteodaten/Standortnamen`
+          `https://widprojektarbeitzf.vercel.app/Meteodaten/Standortnamen`
         );
         setOptionenStandort(anfrage.data);
       } catch (err) {
@@ -63,14 +63,17 @@ export default function App() {
     }
 
     try {
-      const anfrage = await axios.get(`http://127.0.0.1:8000/Altair/${Art}`, {
-        params: {
-          Standort: JSON.stringify(Standort),
-          Abfrage: Abfrage,
-          TSstartDate: TSstartDate,
-          TSendDate: TSendDate,
-        },
-      });
+      const anfrage = await axios.get(
+        `https://widprojektarbeitzf.vercel.app/Altair/${Art}`,
+        {
+          params: {
+            Standort: JSON.stringify(Standort),
+            Abfrage: Abfrage,
+            TSstartDate: TSstartDate,
+            TSendDate: TSendDate,
+          },
+        }
+      );
       setGrafik(anfrage.data);
     } catch (err) {
       setError(

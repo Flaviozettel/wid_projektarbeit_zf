@@ -1,6 +1,6 @@
 import { VegaLite } from "react-vega";
 
-export default function Visualisierung({ Grafik, Abfrage }) {
+export default function Visualisierung({ Grafik }) {
   if (!Grafik) {
     return (
       <div className="container_vis" style={{ width: 1000, height: 600 }}>
@@ -35,7 +35,6 @@ export default function Visualisierung({ Grafik, Abfrage }) {
           justifyContent: "center",
           width: 1000,
           height: 600,
-          background: "#ffebee",
         }}
       >
         <VegaLite spec={Grafik} />
