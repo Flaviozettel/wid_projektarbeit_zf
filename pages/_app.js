@@ -23,9 +23,7 @@ export default function App() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const anfrage = await axios.get(
-          `https://widprojektarbeitzf.vercel.app/Meteodaten/Standortnamen`
-        );
+        const anfrage = await axios.get(`/api/py/Meteodaten/Standortnamen`);
         setOptionenStandort(anfrage.data);
       } catch (err) {
         setError("Fehler beim Abfragen der Stadortnamen");
@@ -64,7 +62,7 @@ export default function App() {
 
     try {
       const anfrage = await axios.get(
-        `https://widprojektarbeitzf.vercel.app/Altair/${Art}`,
+        `https://widprojektarbeitzf.vercel.app/api/py/Altair/${Art}`,
         {
           params: {
             Standort: JSON.stringify(Standort),
