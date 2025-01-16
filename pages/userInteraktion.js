@@ -172,6 +172,7 @@ export default function UserInteraktion({
           variant: "outlined",
           background: "#add8e6",
         }}
+        disabled={ParaAbfüllen}
       >
         Erstellen
       </Button>
