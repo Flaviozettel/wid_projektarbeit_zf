@@ -14,8 +14,7 @@ export default function App() {
   const [Error, setError] = useState("");
   const [Abfrage, setAbfrage] = useState("");
   const [optionenStandort, setOptionenStandort] = useState([]);
-  const [startDateError, setStartDateError] = useState(false);
-  const [endDateError, setEndDateError] = useState(false);
+
   const [dateErrorText, setDateErrorText] = useState("");
   const [TSstartDate, setTSStartDate] = useState(12345);
   const [TSendDate, setTSEndDate] = useState(12345);
@@ -57,8 +56,6 @@ export default function App() {
     }
     if (TSstartDate >= TSendDate) {
       setDateErrorText("Startdatum kann nicht nach Enddatum liegen");
-      setEndDateError(true);
-      setStartDateError(true);
       return;
     }
 
@@ -117,13 +114,8 @@ export default function App() {
             Erstellen={Erstellen}
             Abfrage={Abfrage}
             setAbfrage={setAbfrage}
-            setOptionenStandort={setOptionenStandort}
             optionenStandort={optionenStandort}
             Error={Error}
-            startDateError={startDateError}
-            setStartDateError={setStartDateError}
-            endDateError={endDateError}
-            setEndDateError={setEndDateError}
             dateErrorText={dateErrorText}
             setDateErrorText={setDateErrorText}
             setTSStartDate={setTSStartDate}
