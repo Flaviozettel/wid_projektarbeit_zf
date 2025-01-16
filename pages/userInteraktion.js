@@ -20,7 +20,6 @@ export default function UserInteraktion({
   setAbfrage,
   Abfrage,
   optionenStandort,
-  useEffect,
   Error,
   dateErrorText,
   setTSStartDate,
