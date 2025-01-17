@@ -30,7 +30,7 @@ def Punkte(Standort, Abfrage, TSstartDate, TSendDate):
             x=alt.X("Datum:T", axis=alt.Axis(grid=False, format="%d.%m.%Y", labelAngle=-90, labelFontSize=12, titleFontSize=12, labelFont="Arial", titleFont="Arial", title="Datum", tickCount="day")),
             y=alt.Y(f"{Abfrage}:Q", axis=alt.Axis(grid=True,  labelFontSize=12, titleFontSize=12, labelFont="Arial", titleFont="Arial", title=f"{Abfrage_typ}")),
             color=alt.Color("Standortname:N", legend=alt.Legend(title="Legende",labelFontSize=12, labelFont="Arial", orient="right"))
-        ).properties(width= 450, height= 400, title=f"Vergleich {Abfrage_typ} nach Datum und Station")
+        ).properties(width= 450, height= 400, title=f"Vergleich {Abfrage_typ} im Zeitraum vom {TSstartDate} bis {TSendDate} im Raum Zürich")
 
         return diagramm.to_dict()
     except Exception as e:
