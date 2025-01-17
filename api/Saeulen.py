@@ -33,7 +33,7 @@ def Saeulen(Standort, Abfrage, TSstartDate, TSendDate):
             y=alt.Y(f"{Abfrage}:Q", axis=alt.Axis(grid=True,  labelFontSize=12, titleFontSize=12, labelFont="Arial", titleFont="Arial", title=f"{Abfrage_typ}")),
             color=alt.Color("Standortname:N", legend=alt.Legend(title="Legende",labelFontSize=12, labelFont="Arial", orient="right"))
 
-        ).properties(width= 450, height= 400, title=f"Vergleich {Abfrage_typ} im Zeitraum vom {pd.to_datetime(TSstartDate, unit="ms").strftime('%m.%d.%Y')} bis {pd.to_datetime(TSendDate, unit="ms").strftime('%m.%d.%Y')} im Raum Zürich")
+        ).properties(width= 450, height= 400, title=f"Vergleich {Abfrage_typ} im Zeitraum vom {pd.to_datetime(TSstartDate, unit="ms").strftime('%d.%m.%Y')} bis {pd.to_datetime(TSendDate, unit="ms").strftime('%d.%m.%Y')}, Raum Zürich")
 
         return diagramm.to_dict()
     except Exception as e:
