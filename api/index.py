@@ -10,7 +10,9 @@ import json
 app = FastAPI(docs_url="/api/py/docs", openapi_url="/api/py/openapi.json")
 app.add_middleware( 
 CORSMiddleware, 
-allow_origins=["*"],   
+allow_origins=["https://wetterstationenzuerich.vercel.app",
+               "https://widprojektarbeitzf.vercel.app/",
+               "https://widprojektarbeitzf-git-main-flavio1901s-projects.vercel.app/"],   
 allow_credentials=True, 
 allow_methods=["*"], 
 allow_headers=["*"], 
